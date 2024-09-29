@@ -1,8 +1,8 @@
 import serialize from "../lib/serialize";
+import { plugins } from "../lib/Loader";
 import { exec } from "child_process";
 import util from "util";
 import path from "path";
-import { plugins } from "../lib/Loader";
 
 export const startMessageHandler = async (client: any, store: any) => {
   client.ev.on("messages.upsert", async ({ messages }: { messages: any[] }) => {
@@ -26,14 +26,8 @@ export const startMessageHandler = async (client: any, store: any) => {
       const command = isCommand ? m.command.toLowerCase() : false;
 
       if (typeof plugin.before === "function") {
-        const shouldContinue = await plugin.before.call(m, {
-          client,
-        });
-
-        if (shouldContinue) {
-          continue;
+          if (await plugin.before.call(client, m, { messages })) continue;
         }
-      }
 
       let isAccept = Array.isArray(plugin.cmd) && plugin.cmd.includes(command);
 
@@ -47,7 +41,6 @@ export const startMessageHandler = async (client: any, store: any) => {
       try {
         await plugin.code({
           conn: client,
-          details: plugin.details,
           from,
           m,
         });

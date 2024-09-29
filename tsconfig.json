@@ -10,7 +10,10 @@
     "baseUrl": "./src",
     "paths": {
       "*": ["node_modules/*"]
-    }
+    },
+    "resolveJsonModule": true,
+    "moduleResolution": "node",
+    "noImplicitAny": true
   },
   "include": ["src/**/*"]
 }

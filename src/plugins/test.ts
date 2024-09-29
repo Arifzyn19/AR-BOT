@@ -1,12 +1,13 @@
 import { Command } from "../types/Command";
+import util from "util";
 
 const handler: Command = {
-  cmd: ["example"],
+  cmd: ["test"],
   code: async ({ conn, from, m }) => {
     await conn.sendMessage(
       from,
       {
-        text: "Ini adalah contoh",
+        text: util.format(m),
       },
       {
         quoted: m,
